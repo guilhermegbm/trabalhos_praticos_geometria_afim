@@ -2,10 +2,14 @@
 //Gabriel Nunes Mendes - 2017021177
 //Guilherme Barboza Mendonça - 2019006655
 
+//Classe auxiliar
 QuatOp quatOp = new QuatOp();
 
 //String que configura os modos de execução: "ROTACAO_ITERATIVA" ou "SLERP"
 String modo = null;
+
+//String auxiliar que mostra o modo atual
+String textoModo = "";
 
 //Ângulo pelo qual a rotação dos pontos será feita
 float angulo = PI/50;
@@ -35,12 +39,13 @@ void setup() {
     size(600, 600);
     stroke(255);
 
-    //this.configurarRotacaoIterativa();
-    this.configurarSLERP();
+    this.configurarRotacaoIterativa();
+    //this.configurarSLERP();
 }
 
 void configurarRotacaoIterativa() {
     this.modo = "ROTACAO_ITERATIVA";
+    this.textoModo = "Rotação Iterativa (Clique para alternar)";
 
     this.angulo = PI/50;
 
@@ -54,6 +59,7 @@ void configurarRotacaoIterativa() {
 
 void configurarSLERP() {
     this.modo = "SLERP";
+    this.textoModo = "SLERP (Clique para alternar)";
 
     this.contadorSLERP = 0;
 
@@ -90,4 +96,22 @@ void draw() {
             this.contadorSLERP += 0.01;
         }
     }
+    
+    this.drawTextoModo();
+}
+
+//Usamos o evento "mouseClicked" para alternar entre a Rotação Iterativa e o SLERP
+void mouseClicked() {
+    if ("ROTACAO_ITERATIVA".equals(this.modo)) {
+        this.configurarSLERP();
+    } else if ("SLERP".equals(this.modo)) {
+        this.configurarRotacaoIterativa();
+    }
+}
+
+void drawTextoModo () {
+    scale(1, -1);
+    textSize(30);
+    fill(0, 408, 612);
+    text(this.textoModo, (-width/2)+50, (-height/2)+50);
 }
