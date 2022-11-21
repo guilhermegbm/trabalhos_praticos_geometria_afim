@@ -13,9 +13,11 @@ class QuatOp {
      println(quatOp.divQuatPorEscalar(p, 2));
      println(quatOp.multQuats(p, q));
      println(quatOp.multQuatsEficiente(p, q));
+     println(quatOp.somaQuats(p, q));
      println(quatOp.conjugado(p));
      println(quatOp.norma(p));
      println(quatOp.inv(p));
+     println(quatOp.dotProd(p, q));
      println(quatOp.multQuats(p, quatOp.inv(p)));
      println("-----------");
      
@@ -28,9 +30,9 @@ class QuatOp {
 
     /*
     O método abaixo calcula a multiplicação de quatérnions usando o agoritmo
-    tradicional, usando a propriedade da distributividade dos termos assim
-    como foi visto em sala de aula. 
-    */
+     tradicional, usando a propriedade da distributividade dos termos assim
+     como foi visto em sala de aula.
+     */
     public Quaternion multQuats(Quaternion p, Quaternion q) {
         return new Quaternion
             ( p.sc*q.sc-p.i*q.i-p.j*q.j-p.k*q.k,
@@ -41,11 +43,11 @@ class QuatOp {
 
     /*
     O algoritmo abaixo computa a multipicação de quatérnions de forma mais eficiente,
-    usando apenas oito multiplicações, assim como está descrito no artigo abaixo (pág. 8)
-    THE COMPLEXITY OF THE QUATERNION PRODUCT, Howell, T. Lafon, J., TR 75-245, 1975.
-    Esse artigo pode ser acessado no link abaixo:
-    https://theworld.com/~sweetser/quaternions/ps/cornellcstr75-245.pdf
-    */
+     usando apenas oito multiplicações, assim como está descrito no artigo abaixo (pág. 8)
+     THE COMPLEXITY OF THE QUATERNION PRODUCT, Howell, T. Lafon, J., TR 75-245, 1975.
+     Esse artigo pode ser acessado no link abaixo:
+     https://theworld.com/~sweetser/quaternions/ps/cornellcstr75-245.pdf
+     */
     public Quaternion multQuatsEficiente(Quaternion p, Quaternion q) {
         float mult1 = (p.sc + p.i) * (q.sc + q.i);
         float mult2 = (p.k - p.j) * (q.j - q.k);
@@ -76,6 +78,10 @@ class QuatOp {
         return this.multQuatPorEscalar(q, (1 / a));
     }
 
+    public Quaternion somaQuats(Quaternion p, Quaternion q) {
+        return new Quaternion ( p.sc + q.sc, p.i + q.i, p.j + q.j, p.k + q.k );
+    }
+
     public Quaternion conjugado(Quaternion q) {
         return new Quaternion(q.sc, -q.i, -q.j, -q.k);
     }
@@ -86,6 +92,22 @@ class QuatOp {
 
     public Quaternion inv(Quaternion q) {
         return this.divQuatPorEscalar(this.conjugado(q), pow(this.norma(q), 2));
+    }
+
+    public float dotProd(Quaternion p, Quaternion q) {
+        return p.sc * q.sc + p.i * q.i + p.j * q.j + p.k * q.k;
+    }
+
+    Quaternion slerp(Quaternion p, Quaternion q, float t) {
+        float angulo = acos(quatOp.dotProd(p, q));
+
+        float fatorP = (sin((1 - t) * angulo)) / sin(angulo);
+        float fatorQ = (sin(t * angulo)) / sin(angulo);
+
+        Quaternion pMult = quatOp.multQuatPorEscalar(p, fatorP);
+        Quaternion qMult = quatOp.multQuatPorEscalar(q, fatorQ);
+
+        return quatOp.somaQuats(pMult, qMult);
     }
 
     public Quaternion gerarQuatAleatorio() {

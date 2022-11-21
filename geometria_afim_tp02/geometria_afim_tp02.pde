@@ -7,7 +7,6 @@ QuatOp quatOp = new QuatOp();
 //String que configura os modos de execução: "ROTACAO_ITERATIVA" ou "SLERP"
 String modo = null;
 
-//        Variáveis usadas na rotação iterativa do cubo
 //Ângulo pelo qual a rotação dos pontos será feita
 float angulo = PI/50;
 
@@ -25,24 +24,47 @@ float eixoX = 0.0;
 float eixoY = 0.0;
 float eixoZ = 0.0;
 
+//Cubo da Rotação Iterativa
 Cubo cubo = null;
+
+float contadorSLERP = 0;
+Quaternion slerpP = null;
+Quaternion slerpQ = null;
 
 void setup() {
     size(600, 600);
     stroke(255);
 
-    this.configurarRotacaoIterativa();
+    //this.configurarRotacaoIterativa();
+    this.configurarSLERP();
 }
 
 void configurarRotacaoIterativa() {
     this.modo = "ROTACAO_ITERATIVA";
+
+    this.angulo = PI/50;
 
     this.eixoX = random(-1, 1);
     this.eixoY = random(-1, 1);
     this.eixoZ = random(-1, 1);
 
     float tamanhoAresta = 100;
-    this.cubo = new Cubo(tamanhoAresta, this.eixoX, this.eixoY, this.eixoZ, this.angulo);
+    this.cubo = new Cubo(tamanhoAresta, this.eixoX, this.eixoY, this.eixoZ, this.angulo, false);
+}
+
+void configurarSLERP() {
+    this.modo = "SLERP";
+
+    this.contadorSLERP = 0;
+
+    this.angulo = random(0, PI);
+
+    this.eixoX = random(-1, 1);
+    this.eixoY = random(-1, 1);
+    this.eixoZ = random(-1, 1);
+
+    float tamanhoAresta = 100;
+    this.cubo = new Cubo(tamanhoAresta, this.eixoX, this.eixoY, this.eixoZ, this.angulo, true);
 }
 
 void draw() {
@@ -60,5 +82,12 @@ void draw() {
 
         //this.cubo.rotacionarCubo();
         this.cubo.rotacionarCuboEficiente();
+    } else if ("SLERP".equals(this.modo)) {
+        this.cubo.drawCubo();
+        this.cubo.drawCuboSLERPFinal();
+        this.cubo.drawCuboSLERPIntermediario(contadorSLERP);
+        if (this.contadorSLERP <= 1) {
+            this.contadorSLERP += 0.01;
+        }
     }
 }
