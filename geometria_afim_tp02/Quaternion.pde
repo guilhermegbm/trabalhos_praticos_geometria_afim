@@ -1,3 +1,4 @@
+//Classe auxiliar que representa um quatérnion
 class Quaternion {
 
     float sc;
@@ -11,8 +12,8 @@ class Quaternion {
         this.j = j;
         this.k = k;
     }
-    
+
     public String toString() {
-        return this.sc + " + " + this.i + "i + " + this.j + "j + " + this.k + "k";       
+        return this.sc + " + " + this.i + "i + " + this.j + "j + " + this.k + "k";
     }
 }

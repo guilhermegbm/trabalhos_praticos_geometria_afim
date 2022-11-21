@@ -2,7 +2,7 @@
 //Gabriel Nunes Mendes - 2017021177
 //Guilherme Barboza Mendonça - 2019006655
 
-//Classe auxiliar
+//Classe auxiliar utilitária com algumas operações de Quatérnions importantes
 QuatOp quatOp = new QuatOp();
 
 //String que configura os modos de execução: "ROTACAO_ITERATIVA" ou "SLERP"
@@ -11,22 +11,8 @@ String modo = null;
 //String auxiliar que mostra o modo atual
 String textoModo = "";
 
-//Ângulo pelo qual a rotação dos pontos será feita
+//Ângulo pelo qual a rotação iterativa dos pontos do cubo será feita
 float angulo = PI/50;
-
-//Eixo pelo qual a rotação dos pontos será feita
-//OBS: Como o eixo de rotação é tridimensional, não é possível pegar
-//e configurar dinamicamente o eixo a partir do "click" do usuário
-//(a não ser que uma das coordenadas fosse jogada fora ou gerada
-//aleatoriamente...). Outra possível opção seria usar GUIs personalizadas,
-//porém, essas funcionalidades do processing.js só existem com o uso
-//de bibliotecas e códigos de terceiros, o que envolveria downloads e
-//configurações que complicariam a compilação, execução e teste do
-//código, logo, decidimos por manter uma geração aleatória dos eixos
-//durante a inicialização do algorítmo
-float eixoX = 0.0;
-float eixoY = 0.0;
-float eixoZ = 0.0;
 
 //Cubo da Rotação Iterativa
 Cubo cubo = null;
@@ -49,12 +35,22 @@ void configurarRotacaoIterativa() {
 
     this.angulo = PI/50;
 
-    this.eixoX = random(-1, 1);
-    this.eixoY = random(-1, 1);
-    this.eixoZ = random(-1, 1);
+    /*Eixo pelo qual a rotação dos pontos será feita
+     OBS: Como o eixo de rotação é tridimensional, não é possível pegar
+     e configurar dinamicamente o eixo a partir do "click" do usuário
+     (a não ser que uma das coordenadas fosse jogada fora ou gerada
+     aleatoriamente...). Outra possível opção seria usar GUIs personalizadas,
+     porém, essas funcionalidades do processing.js só existem com o uso
+     de bibliotecas e códigos de terceiros, o que envolveria downloads e
+     configurações que complicariam a compilação, execução e teste do
+     código, logo, decidimos por manter uma geração aleatória básica dos
+     eixos durante a inicialização do algorítmo*/
+    float eixoX = random(-1, 1);
+    float eixoY = random(-1, 1);
+    float eixoZ = random(-1, 1);
 
     float tamanhoAresta = 100;
-    this.cubo = new Cubo(tamanhoAresta, this.eixoX, this.eixoY, this.eixoZ, this.angulo, false);
+    this.cubo = new Cubo(tamanhoAresta, eixoX, eixoY, eixoZ, angulo, false);
 }
 
 void configurarSLERP() {
@@ -65,12 +61,12 @@ void configurarSLERP() {
 
     this.angulo = random(0, PI);
 
-    this.eixoX = random(-1, 1);
-    this.eixoY = random(-1, 1);
-    this.eixoZ = random(-1, 1);
+    float eixoX = random(-1, 1);
+    float eixoY = random(-1, 1);
+    float eixoZ = random(-1, 1);
 
     float tamanhoAresta = 100;
-    this.cubo = new Cubo(tamanhoAresta, this.eixoX, this.eixoY, this.eixoZ, this.angulo, true);
+    this.cubo = new Cubo(tamanhoAresta, eixoX, eixoY, eixoZ, this.angulo, true);
 }
 
 void draw() {
@@ -84,19 +80,19 @@ void draw() {
     background(0);
 
     if ("ROTACAO_ITERATIVA".equals(this.modo)) {
-        this.cubo.drawCubo();
+        this.cubo.drawCubo(230, 225, 28);
 
-        //this.cubo.rotacionarCubo();
+        //this.cubo.rotacionarCubo(); Use esse método para rotacionar o Cubo com o produto de quatérnions tradicional
         this.cubo.rotacionarCuboEficiente();
     } else if ("SLERP".equals(this.modo)) {
-        this.cubo.drawCubo();
+        this.cubo.drawCubo(255, 0, 0);
         this.cubo.drawCuboSLERPFinal();
-        this.cubo.drawCuboSLERPIntermediario(contadorSLERP);
+        this.cubo.drawCuboSLERPIntermediario(contadorSLERP, 230, 225, 255);
         if (this.contadorSLERP <= 1) {
             this.contadorSLERP += 0.01;
         }
     }
-    
+
     this.drawTextoModo();
 }
 

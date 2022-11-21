@@ -1,6 +1,5 @@
-//Classe utilitária com algumas operações de Quatérnions importantes
+//Classe auxiliar utilitária com algumas operações de Quatérnions importantes
 class QuatOp {
-
 
     /*
     Testes:
@@ -95,9 +94,12 @@ class QuatOp {
     }
 
     public float dotProd(Quaternion p, Quaternion q) {
-        return p.sc * q.sc + p.i * q.i + p.j * q.j + p.k * q.k;
+        return (p.sc * q.sc) + (p.i * q.i) + (p.j * q.j) + (p.k * q.k);
     }
 
+    /*
+    Função para computar o SLERP entre dois quatérnions
+     */
     Quaternion slerp(Quaternion p, Quaternion q, float t) {
         float angulo = acos(quatOp.dotProd(p, q));
 

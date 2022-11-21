@@ -26,13 +26,8 @@ class Cubo {
         this.ponto6 = new Quaternion(0, tamanhoAresta, tamanhoAresta, -tamanhoAresta);
         this.ponto7 = new Quaternion(0, tamanhoAresta, tamanhoAresta, tamanhoAresta);
 
-        /*this.eixoX = eixoX;
-         this.eixoY = eixoY;
-         this.eixoZ = eixoZ;
-         this.angulo = angulo;*/
-
         /*
-        Visando otimizar o processamento, os quatérnions de rotação "u" e "uInv"
+         Visando otimizar o processamento, os quatérnions de rotação "u" e "uInv"
          são pré-computados uma única vez no contrutor
          */
         Quaternion u0 = new Quaternion(0, eixoX, eixoY, eixoZ);
@@ -40,14 +35,19 @@ class Cubo {
         this.u = quatOp.somaQuatComEscalar(quatOp.multQuatPorEscalar(u0Normalizado, sin(angulo)), cos(angulo));
         this.uInv = quatOp.inv(u);
 
+        /*
+         Ainda visando otimizar a computação, quando necessário, pré-computamos
+         o cubo "final" do processamento do SLERP
+         */
         if (computarSLERP) {
             this.cuboSLERPFinal = new Cubo(tamanhoAresta, eixoX, eixoY, eixoZ, angulo, false);
             this.cuboSLERPFinal.rotacionarCuboEficiente();
         }
     }
 
-    public void drawCubo() {
-        stroke(230, 225, 28);
+    //Função para desenhar as arestas do cubo
+    public void drawCubo(int r, int g, int b) {
+        stroke(r, g, b);
 
         line(this.ponto0.i, this.ponto0.j, this.ponto2.i, this.ponto2.j);
         line(this.ponto2.i, this.ponto2.j, this.ponto3.i, this.ponto3.j);
@@ -101,13 +101,18 @@ class Cubo {
         this.ponto7 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto7), uInv);
     }
 
+    //Função para desenhar as arestas do cubo final do SLERP
     public void drawCuboSLERPFinal() {
         if (this.cuboSLERPFinal != null) {
-            this.cuboSLERPFinal.drawCubo();
+            this.cuboSLERPFinal.drawCubo(0, 255, 0);
         }
     }
 
-    public void drawCuboSLERPIntermediario(float t) {
+    /*
+    Função para desenhar e movimentar um cubo "intermediário" de acordo
+     com a função de SLERP e um parãmetro t que varia de 0 a 1
+     */
+    public void drawCuboSLERPIntermediario(float t, int r, int g, int b) {
         if (this.cuboSLERPFinal == null) {
             return;
         }
@@ -136,6 +141,11 @@ class Cubo {
          println(quatOp.norma(sDenorm));*/
 
 
+        /*
+         A Função de SLERP exige que os quatérnions sejam unitários, logo, devemos
+         normalizar os vetores antes de passar para a função e também devemos
+         "desnormalizar" o vetor resultante com a norma acima
+         */
         Quaternion pontoSlerp0 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto0, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto0, norma), t), norma);
         Quaternion pontoSlerp1 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto1, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto1, norma), t), norma);
         Quaternion pontoSlerp2 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto2, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto2, norma), t), norma);
@@ -144,8 +154,6 @@ class Cubo {
         Quaternion pontoSlerp5 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto5, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma), t), norma);
         Quaternion pontoSlerp6 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto6, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto6, norma), t), norma);
         Quaternion pontoSlerp7 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto7, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto7, norma), t), norma);
-
-        stroke(230, 225, 255);
 
         /*
         println("************");
@@ -158,6 +166,8 @@ class Cubo {
          println(pontoSlerp6);
          println(pontoSlerp7);
          */
+
+        stroke(r, g, b);
 
         line(pontoSlerp0.i, pontoSlerp0.j, pontoSlerp2.i, pontoSlerp2.j);
         line(pontoSlerp2.i, pontoSlerp2.j, pontoSlerp3.i, pontoSlerp3.j);
