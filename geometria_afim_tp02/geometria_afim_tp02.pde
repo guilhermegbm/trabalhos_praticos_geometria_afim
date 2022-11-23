@@ -88,7 +88,7 @@ void draw() {
         this.cubo.drawCubo(255, 0, 0);
         this.cubo.drawCuboSLERPFinal();
         this.cubo.drawCuboSLERPIntermediario(contadorSLERP/100, 230, 225, 255);
-        
+
         if (this.contadorSLERP < 100) {
             this.contadorSLERP += 1;
         }

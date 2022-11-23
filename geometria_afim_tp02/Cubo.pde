@@ -91,14 +91,14 @@ class Cubo {
      Vide "QuatOp.multQuatsEficiente" para mais informações
      */
     public void rotacionarCuboEficiente() {
-        this.ponto0 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto0), uInv);
-        this.ponto1 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto1), uInv);
-        this.ponto2 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto2), uInv);
-        this.ponto3 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto3), uInv);
-        this.ponto4 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto4), uInv);
-        this.ponto5 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto5), uInv);
-        this.ponto6 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto6), uInv);
-        this.ponto7 = quatOp.multQuatsEficiente(quatOp.multQuats(u, this.ponto7), uInv);
+        this.ponto0 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto0), uInv);
+        this.ponto1 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto1), uInv);
+        this.ponto2 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto2), uInv);
+        this.ponto3 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto3), uInv);
+        this.ponto4 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto4), uInv);
+        this.ponto5 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto5), uInv);
+        this.ponto6 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto6), uInv);
+        this.ponto7 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(u, this.ponto7), uInv);
     }
 
     //Função para desenhar as arestas do cubo final do SLERP
@@ -109,7 +109,7 @@ class Cubo {
     }
 
     /*
-    Função para desenhar e movimentar um cubo "intermediário" de acordo
+     Função para desenhar e movimentar um cubo "intermediário" de acordo
      com a função de SLERP e um parãmetro t que varia de 0 a 1
      */
     public void drawCuboSLERPIntermediario(float t, int r, int g, int b) {
@@ -117,61 +117,18 @@ class Cubo {
             return;
         }
 
-        /*Quaternion t0 = quatOp.divQuatPorEscalar(this.ponto5, norma);
-         Quaternion t1 = quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma);
-         
-         float angulo = acos(quatOp.dotProd(t0, t1));
-         println("-----------");
-         println(quatOp.norma(t0));
-         println(quatOp.norma(t1));
-         println(norma);
-         println(this.ponto5);
-         println(this.cuboSLERPFinal.ponto5);
-         println(angulo);
-         println(t);
-         Quaternion s = quatOp.slerp(t0, t1, t);
-         println("slerp:  ");
-         println(s);
-         println(quatOp.norma(s));
-         Quaternion sDenorm = quatOp.multQuatPorEscalar( s, norma);
-         println(sDenorm);
-         println(quatOp.norma(sDenorm));*/
-
         Quaternion quaternionRotacaoIdentidade = new Quaternion(1, 0, 0, 0);
         Quaternion rotacaoSlerp = quatOp.slerp(quaternionRotacaoIdentidade, this.u, t);
         Quaternion rotacaoSlerpInv = quatOp.inv(rotacaoSlerp);
 
-        //println(quatOp.norma(pontoSlerp));
-
-        Quaternion pontoSlerp0 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto0), rotacaoSlerpInv);
-        Quaternion pontoSlerp1 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto1), rotacaoSlerpInv);
-        Quaternion pontoSlerp2 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto2), rotacaoSlerpInv);
-        Quaternion pontoSlerp3 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto3), rotacaoSlerpInv);
-        Quaternion pontoSlerp4 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto4), rotacaoSlerpInv);
-        Quaternion pontoSlerp5 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto5), rotacaoSlerpInv);
-        Quaternion pontoSlerp6 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto6), rotacaoSlerpInv);
-        Quaternion pontoSlerp7 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto7), rotacaoSlerpInv);
-
-        /*Quaternion pontoSlerp0 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto0, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto0, norma), t), norma);
-         Quaternion pontoSlerp1 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto1, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto1, norma), t), norma);
-         Quaternion pontoSlerp2 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto2, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto2, norma), t), norma);
-         Quaternion pontoSlerp3 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto3, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto3, norma), t), norma);
-         Quaternion pontoSlerp4 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto4, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto4, norma), t), norma);
-         Quaternion pontoSlerp5 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto5, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma), t), norma);
-         Quaternion pontoSlerp6 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto6, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto6, norma), t), norma);
-         Quaternion pontoSlerp7 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto7, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto7, norma), t), norma);*/
-
-        /*
-        println("************");
-         println(pontoSlerp0);
-         println(pontoSlerp1);
-         println(pontoSlerp2);
-         println(pontoSlerp3);
-         println(pontoSlerp4);
-         println(pontoSlerp5);
-         println(pontoSlerp6);
-         println(pontoSlerp7);
-         */
+        Quaternion pontoSlerp0 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto0), rotacaoSlerpInv);
+        Quaternion pontoSlerp1 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto1), rotacaoSlerpInv);
+        Quaternion pontoSlerp2 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto2), rotacaoSlerpInv);
+        Quaternion pontoSlerp3 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto3), rotacaoSlerpInv);
+        Quaternion pontoSlerp4 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto4), rotacaoSlerpInv);
+        Quaternion pontoSlerp5 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto5), rotacaoSlerpInv);
+        Quaternion pontoSlerp6 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto6), rotacaoSlerpInv);
+        Quaternion pontoSlerp7 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto7), rotacaoSlerpInv);
 
         stroke(r, g, b);
 
