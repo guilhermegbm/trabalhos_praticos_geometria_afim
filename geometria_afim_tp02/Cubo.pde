@@ -66,7 +66,7 @@ class Cubo {
     }
 
     /*
-    Método responsável por fazer a rotação dos pontos do cubo em torno do eixo descrito
+     Método responsável por fazer a rotação dos pontos do cubo em torno do eixo descrito
      pelas coordenadas [eixoX, eixoY, eixoZ] e pelo ângulo "2 * angulo" passados
      como parâmetros do contrutor dessa classe. Visando otimizar o processamento, os
      quatérnions de rotação "u" e "uInv" são pré-computados uma única vez no contrutor
@@ -117,9 +117,6 @@ class Cubo {
             return;
         }
 
-        //Como isso é um cubo, todos os quatérnions tem a mesma norma
-        float norma = quatOp.norma(this.ponto0);
-
         /*Quaternion t0 = quatOp.divQuatPorEscalar(this.ponto5, norma);
          Quaternion t1 = quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma);
          
@@ -140,20 +137,29 @@ class Cubo {
          println(sDenorm);
          println(quatOp.norma(sDenorm));*/
 
+        Quaternion quaternionRotacaoIdentidade = new Quaternion(1, 0, 0, 0);
+        Quaternion rotacaoSlerp = quatOp.slerp(quaternionRotacaoIdentidade, this.u, t);
+        Quaternion rotacaoSlerpInv = quatOp.inv(rotacaoSlerp);
 
-        /*
-         A Função de SLERP exige que os quatérnions sejam unitários, logo, devemos
-         normalizar os vetores antes de passar para a função e também devemos
-         "desnormalizar" o vetor resultante com a norma acima
-         */
-        Quaternion pontoSlerp0 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto0, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto0, norma), t), norma);
-        Quaternion pontoSlerp1 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto1, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto1, norma), t), norma);
-        Quaternion pontoSlerp2 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto2, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto2, norma), t), norma);
-        Quaternion pontoSlerp3 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto3, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto3, norma), t), norma);
-        Quaternion pontoSlerp4 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto4, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto4, norma), t), norma);
-        Quaternion pontoSlerp5 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto5, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma), t), norma);
-        Quaternion pontoSlerp6 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto6, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto6, norma), t), norma);
-        Quaternion pontoSlerp7 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto7, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto7, norma), t), norma);
+        //println(quatOp.norma(pontoSlerp));
+
+        Quaternion pontoSlerp0 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto0), rotacaoSlerpInv);
+        Quaternion pontoSlerp1 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto1), rotacaoSlerpInv);
+        Quaternion pontoSlerp2 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto2), rotacaoSlerpInv);
+        Quaternion pontoSlerp3 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto3), rotacaoSlerpInv);
+        Quaternion pontoSlerp4 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto4), rotacaoSlerpInv);
+        Quaternion pontoSlerp5 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto5), rotacaoSlerpInv);
+        Quaternion pontoSlerp6 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto6), rotacaoSlerpInv);
+        Quaternion pontoSlerp7 = quatOp.multQuatsEficiente(quatOp.multQuats(rotacaoSlerp, this.ponto7), rotacaoSlerpInv);
+
+        /*Quaternion pontoSlerp0 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto0, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto0, norma), t), norma);
+         Quaternion pontoSlerp1 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto1, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto1, norma), t), norma);
+         Quaternion pontoSlerp2 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto2, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto2, norma), t), norma);
+         Quaternion pontoSlerp3 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto3, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto3, norma), t), norma);
+         Quaternion pontoSlerp4 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto4, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto4, norma), t), norma);
+         Quaternion pontoSlerp5 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto5, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto5, norma), t), norma);
+         Quaternion pontoSlerp6 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto6, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto6, norma), t), norma);
+         Quaternion pontoSlerp7 = quatOp.multQuatPorEscalar( quatOp.slerp(quatOp.divQuatPorEscalar(this.ponto7, norma), quatOp.divQuatPorEscalar(this.cuboSLERPFinal.ponto7, norma), t), norma);*/
 
         /*
         println("************");

@@ -87,10 +87,17 @@ void draw() {
     } else if ("SLERP".equals(this.modo)) {
         this.cubo.drawCubo(255, 0, 0);
         this.cubo.drawCuboSLERPFinal();
-        this.cubo.drawCuboSLERPIntermediario(contadorSLERP, 230, 225, 255);
-        if (this.contadorSLERP <= 1) {
-            this.contadorSLERP += 0.01;
+        this.cubo.drawCuboSLERPIntermediario(contadorSLERP/100, 230, 225, 255);
+        
+        if (this.contadorSLERP < 100) {
+            this.contadorSLERP += 1;
         }
+        //OBS: Em versões anteriores, usávamos o contadorSLERP como um float que variava de 0 a 1 com pequenos passos
+        //de 0.01, porém, notamos que, após algumas iterações, devido a problemas de arredondamento, a variável
+        //passava a ter valores inconsistentes como "0.41999987". Esse erro acumulava até o valor "1", que chegava a
+        //ter valores como "1.0099994", o que parece pouco, mas dava uma diferença ENORME e bem visivel na hora de
+        //calcular o SLERP e a sua respectiva rotação... Usando contadorSLERP como um inteiro que vai de 0 a 100 e
+        //simplesmente dividindo ele por 100 se mostrou bem mais estável!
     }
 
     this.drawTextoModo();
