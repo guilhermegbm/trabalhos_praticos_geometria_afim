@@ -33,7 +33,11 @@ class Cubo {
         Quaternion u0 = new Quaternion(0, eixoX, eixoY, eixoZ);
         Quaternion u0Normalizado = quatOp.divQuatPorEscalar(u0, quatOp.norma(u0));
         this.u = quatOp.somaQuatComEscalar(quatOp.multQuatPorEscalar(u0Normalizado, sin(angulo)), cos(angulo));
-        this.uInv = quatOp.inv(u);
+
+        //OBS: Uma otimização interessante: Como "u" é unitário, não precisamos computar o seu inverso, afinal,
+        //o seu inverso é igual ao seu conjugado (que é computacionalmente mais fácil de calcular)!!
+        this.uInv = quatOp.conjugado(u);
+        //this.uInv = quatOp.inv(u);
 
         /*
          Ainda visando otimizar a computação, quando necessário, pré-computamos
@@ -119,7 +123,8 @@ class Cubo {
 
         Quaternion quaternionRotacaoIdentidade = new Quaternion(1, 0, 0, 0);
         Quaternion rotacaoSlerp = quatOp.slerp(quaternionRotacaoIdentidade, this.u, t);
-        Quaternion rotacaoSlerpInv = quatOp.inv(rotacaoSlerp);
+        //Quaternion rotacaoSlerpInv = quatOp.inv(rotacaoSlerp);
+        Quaternion rotacaoSlerpInv = quatOp.conjugado(rotacaoSlerp);
 
         Quaternion pontoSlerp0 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto0), rotacaoSlerpInv);
         Quaternion pontoSlerp1 = quatOp.multQuatsEficiente(quatOp.multQuatsEficiente(rotacaoSlerp, this.ponto1), rotacaoSlerpInv);
