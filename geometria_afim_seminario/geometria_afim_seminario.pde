@@ -1,11 +1,3 @@
-float angulo1 = PI/32;
-float[][] matRot1 = {{cos(angulo1), -sin(angulo1)},
-    {sin(angulo1), cos(angulo1)}};
-
-float angulo2 = -PI/64;
-float[][] matRot2 = {{cos(angulo2), -sin(angulo2)},
-    {sin(angulo2), cos(angulo2)}};
-
 MatrizUtils mUtils = new MatrizUtils();
 ArvoreHierarquicaPosAbs arvoreHierarquicaPosAbs = null;
 ArvoreHierarquicaPosRel arvoreHierarquicaPosRel = null;
@@ -19,7 +11,7 @@ void setup() {
 
     //makeTestPosRel1();
     //makeTestPosRel2();
-    //makeTestPosRel3();
+    makeTestPosRel3();
 
     //arvoreHierarquicaPosAbs.printarArvore();
     //arvoreHierarquicaPosRel.printarArvore();

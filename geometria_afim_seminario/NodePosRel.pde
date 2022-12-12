@@ -6,37 +6,32 @@ public class NodePosRel {
     private NodePosRel[] filhos = {};
 
     private float anguloRotacao;
-    float[][] matRotTransHomog = null;
+    float[][] matRot = null;
 
     public NodePosRel(float x, float y, float anguloRotacao) {
         this.posicaoRelativa = new float[][]{
             {x},
-            {y},
-            {1}
+            {y}
         };
 
         this.anguloRotacao = anguloRotacao;
-        this.matRotTransHomog = new float[][]{
-            {cos(anguloRotacao), -sin(anguloRotacao), 0},
-            {sin(anguloRotacao), cos(anguloRotacao), 0},
-            {0, 0, 1}
+        this.matRot = new float[][]{
+            {cos(anguloRotacao), -sin(anguloRotacao)},
+            {sin(anguloRotacao), cos(anguloRotacao)},
         };
     }
 
     public void atualizarPosicaoRelativa(float novoX, float novoY) {
         this.posicaoRelativa[0][0] = novoX;
         this.posicaoRelativa[1][0] = novoY;
-        
-        //this.matRotTransHomog[0][2] = novoX;
-        //this.matRotTransHomog[1][2] = novoY;
     }
 
     public float[][] getPosicaoRelativa() {
         return this.posicaoRelativa;
     }
 
-    public float[][] getMatrizRotacaoTranslacaoHomogeneizada() {
-        return this.matRotTransHomog;
+    public float[][] getMatrizRotacao() {
+        return this.matRot;
     }
 
     public NodePosRel[] getFilhos() {

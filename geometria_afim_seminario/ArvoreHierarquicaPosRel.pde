@@ -68,15 +68,14 @@ public class ArvoreHierarquicaPosRel {
     
     public void transform() {
         this.transformRecursivo(this.raiz, new float[][]{
-            {1, 0, 0},
-            {0, 1, 0},
-            {0, 0, 1}
+            {1, 0},
+            {0, 1}
         });
     }
     
     private void transformRecursivo(NodePosRel node, float[][] rotAcumulada) {
         float[][] posRel = node.getPosicaoRelativa();
-        float[][] matRot = node.getMatrizRotacaoTranslacaoHomogeneizada();
+        float[][] matRot = node.getMatrizRotacao();
         
         float[][] novaRotAcumulada = mUtils.multiplicarMatrizes(rotAcumulada, matRot);
         
