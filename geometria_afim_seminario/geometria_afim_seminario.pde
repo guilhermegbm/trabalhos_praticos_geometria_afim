@@ -2,16 +2,19 @@ MatrizUtils mUtils = new MatrizUtils();
 ArvoreHierarquicaPosAbs arvoreHierarquicaPosAbs = null;
 ArvoreHierarquicaPosRel arvoreHierarquicaPosRel = null;
 
+int contadorRotacaoSenoide;
 void setup() {
     size(600, 600);
+    contadorRotacaoSenoide = 0;
 
-    //makeTestPosAbs1();
+    makeTestPosAbs1();
     //makeTestPosAbs2();
     //makeTestPosAbs3();
 
     //makeTestPosRel1();
     //makeTestPosRel2();
-    makeTestPosRel3();
+    //makeTestPosRel3();
+    //makeTestPosRel4JoeStick();
 
     //arvoreHierarquicaPosAbs.printarArvore();
     //arvoreHierarquicaPosRel.printarArvore();
@@ -33,6 +36,7 @@ void draw() {
 void keyPressed() {
     if (key == CODED) {
         if (keyCode == DOWN) {
+            contadorRotacaoSenoide++;
             if (arvoreHierarquicaPosAbs != null) {
                 arvoreHierarquicaPosAbs.transform();
             } else if (arvoreHierarquicaPosRel != null) {
@@ -98,4 +102,29 @@ void makeTestPosRel3() {
     NodePosRel n4 = arvoreHierarquicaPosRel.inserirFilho(n3, -50, 50, PI/128);
     NodePosRel n5 = arvoreHierarquicaPosRel.inserirFilho(n3, 50, 50, 0);
     NodePosRel n6 = arvoreHierarquicaPosRel.inserirFilho(n2, 50, 50, 0);
+}
+
+void makeTestPosRel4JoeStick() {
+    arvoreHierarquicaPosRel = new ArvoreHierarquicaPosRel(300, 200);
+
+    NodePosRel tronco = arvoreHierarquicaPosRel.getRaiz();
+
+    NodePosRel pescoco = arvoreHierarquicaPosRel.inserirFilho(tronco, 0, -50, "ROTACAO_NORMAL", 0);
+    NodePosRel cabeca = arvoreHierarquicaPosRel.inserirFilho(pescoco, -50, -50, "ROTACAO_SENOIDE", PI/64);
+
+    NodePosRel bracoSuperiorEsq = arvoreHierarquicaPosRel.inserirFilho(tronco, -60, 60, "ROTACAO_SENOIDE", -PI/32);
+    NodePosRel bracoInferiorEsq = arvoreHierarquicaPosRel.inserirFilho(bracoSuperiorEsq, -75, 0, "ROTACAO_NORMAL", 0);
+
+    NodePosRel bracoSuperiorDir = arvoreHierarquicaPosRel.inserirFilho(tronco, 60, 60, "ROTACAO_SENOIDE", PI/32);
+    NodePosRel bracoInferiorDir = arvoreHierarquicaPosRel.inserirFilho(bracoSuperiorDir, 0, 75, "ROTACAO_NORMAL", 0);
+
+    NodePosRel troncoInferior = arvoreHierarquicaPosRel.inserirFilho(tronco, 0, 200, "ROTACAO_SENOIDE", 0);
+
+    NodePosRel pernaSuperiorEsq = arvoreHierarquicaPosRel.inserirFilho(troncoInferior, -60, 60, "ROTACAO_SENOIDE", -PI/32);
+    NodePosRel pernainferiorEsq = arvoreHierarquicaPosRel.inserirFilho(pernaSuperiorEsq, -53.033, 53.033, "ROTACAO_SENOIDE", -PI/64);
+    NodePosRel peEsq = arvoreHierarquicaPosRel.inserirFilho(pernainferiorEsq, -20, -20, "ROTACAO_NORMAL", 0);
+
+    NodePosRel pernaSuperiorDir = arvoreHierarquicaPosRel.inserirFilho(troncoInferior, 60, 60, "ROTACAO_SENOIDE", PI/32);
+    NodePosRel pernainferiorDir = arvoreHierarquicaPosRel.inserirFilho(pernaSuperiorDir, 75, 0, "ROTACAO_SENOIDE", PI/64);
+    NodePosRel peDir = arvoreHierarquicaPosRel.inserirFilho(pernainferiorDir, 0, 28.28, "ROTACAO_NORMAL", 0);
 }

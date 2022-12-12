@@ -5,14 +5,18 @@ public class NodePosRel {
 
     private NodePosRel[] filhos = {};
 
+    private String estrategia;
+
     private float anguloRotacao;
     float[][] matRot = null;
 
-    public NodePosRel(float x, float y, float anguloRotacao) {
+    public NodePosRel(float x, float y, String estrategia, float anguloRotacao) {
         this.posicaoRelativa = new float[][]{
             {x},
             {y}
         };
+
+        this.estrategia = estrategia;
 
         this.anguloRotacao = anguloRotacao;
         this.matRot = new float[][]{
@@ -26,8 +30,16 @@ public class NodePosRel {
         this.posicaoRelativa[1][0] = novoY;
     }
 
+    public String getEstrategia() {
+        return this.estrategia;
+    }
+
     public float[][] getPosicaoRelativa() {
         return this.posicaoRelativa;
+    }
+
+    public float getAnguloRotacao() {
+        return this.anguloRotacao;
     }
 
     public float[][] getMatrizRotacao() {
