@@ -13,10 +13,10 @@ void setup() {
     size(600, 600);
 
     //makeTestPosAbs1();
-    //makeTestPosAbs2();
+    makeTestPosAbs2();
     //makeTestPosAbs3();
     //makeTestPosAbs4();
-    makeTestPosAbs5();
+    //makeTestPosAbs5();
 
     //arvoreHierarquicaPosAbs.printarArvore();
 }
@@ -27,7 +27,17 @@ void draw() {
 
     if (arvoreHierarquicaPosAbs != null) {
         arvoreHierarquicaPosAbs.display();
-        arvoreHierarquicaPosAbs.transform();
+        //arvoreHierarquicaPosAbs.transform();
+    }
+}
+
+void keyPressed() {
+    if (key == CODED) {
+        if (keyCode == DOWN) {
+            if (arvoreHierarquicaPosAbs != null) {
+                arvoreHierarquicaPosAbs.transform();
+            }
+        }
     }
 }
 
