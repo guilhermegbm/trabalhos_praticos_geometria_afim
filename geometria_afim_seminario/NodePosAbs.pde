@@ -1,6 +1,6 @@
 public class NodePosAbs {
 
-    //Vetor coluna de dimensões [2, 1] que armazena as coordenadas absolutas do ponto que esse nodo representa
+    //Vetor coluna de dimensões [2, 1] que armazena as coordenadas absolutas no plano real do ponto que esse nodo representa
     private float[][] posicaoAbsoluta;
 
     private NodePosAbs[] filhos = {};
